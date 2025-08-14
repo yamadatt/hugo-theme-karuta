@@ -25,19 +25,7 @@ The theme name "karuta" is inspired by the Japanese card game and the drama "Chi
 
 ## Installation
 
-### As a Git Submodule (Recommended)
-
-```bash
-git submodule add https://github.com/yamadatt/hugo-theme-karuta themes/karuta
-```
-
-Then specify the theme in your `config.toml`:
-
-```toml
-theme = "karuta"
-```
-
-### As a Hugo Module
+### As a Hugo Module　(Recommended)
 
 For Hugo v0.110.0 and later, you can use Go modules to manage the theme.
 
@@ -47,13 +35,24 @@ Initialize your site as a Hugo module:
 hugo mod init github.com/yourusername/yoursite
 hugo mod get github.com/yamadatt/hugo-theme-karuta
 ```
-
 Add the following to your `hugo.toml` (or `config.toml`):
 
 ```toml
 [module]
   [[module.imports]]
     path = "github.com/yamadatt/hugo-theme-karuta"
+```
+
+### As a Git Submodule 
+
+```bash
+git submodule add https://github.com/yamadatt/hugo-theme-karuta themes/karuta
+```
+
+Then specify the theme in your `config.toml`:
+
+```toml
+theme = "karuta"
 ```
 
 ### Configuration
@@ -79,35 +78,6 @@ theme   = "karuta"
   section = ["HTML", "JSON"]
 ```
 
-## Content Structure
-
-### Posts
-
-Create posts in the `content/posts/` directory:
-
-```markdown
----
-title: "Your Post Title"
-date: 2024-01-01T00:00:00Z
-tags: ["tag1", "tag2"]
-draft: false
----
-
-Your post content here...
-```
-
-### Pages
-
-Create static pages in the `content/` directory:
-
-```markdown
----
-title: "About"
-date: 2024-01-01T00:00:00Z
----
-
-About page content...
-```
 
 ## Customization
 

@@ -130,16 +130,28 @@
                     {{ with $img }}
                       {{ $res := $p.Resources.GetMatch . }}
                       {{ if $res }}
-                        {{ $thumb := $res.Fill "120x68 center" }}
-                        <img
-                          class="r-cover"
-                          src="{{ $thumb.RelPermalink }}"
-                          width="120"
-                          height="68"
-                          alt="{{ $p.Title }}"
-                          loading="lazy"
-                          decoding="async"
-                        />
+                        {{ if ne $res.MediaType.SubType "svg" }}
+                          {{ $thumb := $res.Fill "120x68 center" }}
+                          <img
+                            class="r-cover"
+                            src="{{ $thumb.RelPermalink }}"
+                            width="120"
+                            height="68"
+                            alt="{{ $p.Title }}"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        {{ else }}
+                          <img
+                            class="r-cover"
+                            src="{{ $res.RelPermalink }}"
+                            width="120"
+                            height="68"
+                            alt="{{ $p.Title }}"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        {{ end }}
                       {{ else }}
                         {{ $src := . }}
                         {{ if hasPrefix . "img/" }}

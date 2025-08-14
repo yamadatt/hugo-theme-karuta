@@ -18,10 +18,14 @@
     {{- if $img -}}
       {{- $res := .Resources.GetMatch $img -}}
       {{- if $res -}}
-        {{- $processedImg := $res.Resize "1200x630 center" -}}
-        {{- $image = $processedImg.Permalink -}}
-        {{- $imageWidth = $processedImg.Width -}}
-        {{- $imageHeight = $processedImg.Height -}}
+        {{- if ne $res.MediaType.SubType "svg" -}}
+          {{- $processedImg := $res.Resize "1200x630 center" -}}
+          {{- $image = $processedImg.Permalink -}}
+          {{- $imageWidth = $processedImg.Width -}}
+          {{- $imageHeight = $processedImg.Height -}}
+        {{- else -}}
+          {{- $image = $res.Permalink -}}
+        {{- end -}}
       {{- else -}}
         {{- $src := $img -}}
         {{- if hasPrefix $img "img/" -}}
