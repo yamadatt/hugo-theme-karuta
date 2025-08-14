@@ -151,34 +151,16 @@
 
 
 <!-- Critical CSS inlined for fastest First Paint -->
-<style>{{ readFile "themes/karuta/static/css/critical.css" | safeCSS }}</style>
+<style>{{ readFile "static/css/critical.css" | safeCSS }}</style>
 
-<!-- Preload and load main CSS asynchronously -->
-<link
-  rel="preload"
-  href="{{ "/css/main.css" | relURL }}"
-  as="style"
-  onload="this.onload=null;this.rel='stylesheet'"
-/>
-<noscript><link rel="stylesheet" href="{{ "/css/main.css" | relURL }}" /></noscript>
+<!-- Load main CSS normally -->
+<link rel="stylesheet" href="{{ "/css/main.css" | relURL }}" />
 
-<!-- Load accessibility CSS asynchronously -->
-<link
-  rel="preload"
-  href="{{ "/css/accessibility.css" | relURL }}"
-  as="style"
-  onload="this.onload=null;this.rel='stylesheet'"
-/>
-<noscript><link rel="stylesheet" href="{{ "/css/accessibility.css" | relURL }}" /></noscript>
+<!-- Load accessibility CSS normally -->
+<link rel="stylesheet" href="{{ "/css/accessibility.css" | relURL }}" />
 
-<!-- Load syntax highlighting CSS asynchronously -->
-<link
-  rel="preload"
-  href="{{ "/css/chroma.css" | relURL }}"
-  as="style"
-  onload="this.onload=null;this.rel='stylesheet'"
-/>
-<noscript><link rel="stylesheet" href="{{ "/css/chroma.css" | relURL }}" /></noscript>
+<!-- Load syntax highlighting CSS normally -->
+<link rel="stylesheet" href="{{ "/css/chroma.css" | relURL }}" />
 
 <!-- Preload critical JavaScript bundles -->
 <link rel="preload" href="{{ "/js/dist/critical.min.js" | relURL }}" as="script" />

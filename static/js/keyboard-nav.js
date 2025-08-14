@@ -2,62 +2,12 @@
 (function () {
   "use strict";
 
-  // Keyboard navigation for search modal
+  // Note: Search modal keyboard navigation is handled in search.js
+  // This function is disabled to avoid duplicate event handlers
   function enhanceSearchModal() {
-    const modal = document.getElementById("search-modal");
-    const input = document.getElementById("search-modal-input");
-    const results = document.getElementById("search-results");
-
-    if (!modal || !input || !results) return;
-
-    // Handle keyboard navigation in search results
-    modal.addEventListener("keydown", function (e) {
-      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-        const resultItems = results.querySelectorAll(".result");
-        if (resultItems.length === 0) return;
-
-        e.preventDefault();
-        const activeElement = document.activeElement;
-        let currentIndex = -1;
-
-        // Find current focused item
-        for (let i = 0; i < resultItems.length; i++) {
-          if (resultItems[i] === activeElement) {
-            currentIndex = i;
-            break;
-          }
-        }
-
-        let nextIndex;
-        if (e.key === "ArrowDown") {
-          nextIndex = currentIndex < resultItems.length - 1 ? currentIndex + 1 : 0;
-        } else {
-          nextIndex = currentIndex > 0 ? currentIndex - 1 : resultItems.length - 1;
-        }
-
-        resultItems[nextIndex].focus();
-      }
-
-      // Close modal with Escape
-      if (e.key === "Escape") {
-        const searchModal = document.getElementById("search-modal");
-        if (searchModal && !searchModal.hidden && searchModal.classList.contains("open")) {
-          // Trigger the same close functionality as the backdrop click
-          const backdrop = searchModal.querySelector(".sm-backdrop");
-          if (backdrop) {
-            backdrop.click();
-          }
-        }
-      }
-
-      // Handle Enter key in search input
-      if (e.key === "Enter" && e.target === input) {
-        const firstResult = results.querySelector(".result");
-        if (firstResult) {
-          firstResult.click();
-        }
-      }
-    });
+    // Keyboard navigation for search modal is handled in search.js
+    // to avoid conflicts and duplicate event handlers
+    return;
   }
 
   // Roving tabindex for navigation menus

@@ -186,9 +186,10 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         }
         if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-          const rnodes = resultsEl ? resultsEl.querySelectorAll(".result") : null;
+          const rnodes = resultsEl ? resultsEl.querySelectorAll("a.result") : null;
           if (!rnodes || rnodes.length === 0) return;
           e.preventDefault();
+          e.stopPropagation();
           const current = document.activeElement;
 
           // If focus is on input and ArrowDown is pressed, move to first result
