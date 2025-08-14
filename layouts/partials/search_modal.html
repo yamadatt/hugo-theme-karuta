@@ -1,0 +1,76 @@
+<div id="search-modal" class="search-modal" aria-hidden="true">
+  <div class="sm-backdrop" tabindex="-1"></div>
+  <div
+    class="sm-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="search-modal-title"
+    tabindex="-1"
+  >
+    <div class="sm-header">
+      <h2 id="search-modal-title">検索</h2>
+      <div class="sm-search-row">
+        <form id="search-form" onsubmit="return false;">
+          <input
+            id="search-modal-input"
+            class="sm-input"
+            type="search"
+            placeholder="検索… (2文字以上)"
+            aria-label="検索キーワード"
+          />
+        </form>
+        <button
+          id="search-filter-toggle"
+          class="sm-filter-btn"
+          aria-label="フィルター設定"
+          aria-expanded="false"
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <path
+              d="M3 6h18M7 12h10M11 18h2"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+      <div id="search-filters" class="sm-filters" hidden>
+        <div class="sm-filter-group">
+          <label class="sm-filter-label">
+            <input type="checkbox" id="filter-posts" checked /> 投稿
+          </label>
+          <label class="sm-filter-label">
+            <input type="checkbox" id="filter-tags" checked /> タグ
+          </label>
+          <label class="sm-filter-label">
+            <input type="checkbox" id="filter-categories" checked /> カテゴリー
+          </label>
+        </div>
+        <div class="sm-filter-group">
+          <select id="sort-order" class="sm-select">
+            <option value="relevance">関連度順</option>
+            <option value="date">日付順</option>
+            <option value="title">タイトル順</option>
+          </select>
+        </div>
+      </div>
+      <div class="sm-meta">
+        <span id="search-count"></span>
+        <span id="active-filters"></span>
+      </div>
+    </div>
+    <div id="search-loading" class="sm-loading" hidden>検索中…</div>
+    <div id="search-history" class="sm-history" hidden>
+      <div class="sm-history-header">
+        <h3>最近の検索</h3>
+        <button id="clear-history" class="sm-clear-btn">履歴をクリア</button>
+      </div>
+      <div id="search-history-list" class="sm-history-list"></div>
+    </div>
+    <div id="search-results" class="sm-body" aria-live="polite"></div>
+    <div class="sm-footer">
+      <span class="sm-hint">Esc で閉じる · 背景クリックで閉じる</span>
+    </div>
+  </div>
+</div>

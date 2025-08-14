@@ -1,0 +1,19 @@
+{{- /* Enhanced Structured Data Implementation */ -}}
+
+{{- /* Website Schema - Home page only */ -}}
+{{ partial "structured-data/website.html" . }}
+
+{{- /* Organization Schema - Home page only */ -}}
+{{ partial "structured-data/organization.html" . }}
+
+{{- /* Article/BlogPosting Schema - Individual posts */ -}}
+{{ partial "structured-data/article.html" . }}
+
+{{- /* BreadcrumbList Schema - All non-home pages */ -}}
+{{ partial "structured-data/breadcrumb.html" . }}
+
+{{- /* FAQ Schema - Pages with FAQ content */ -}}
+{{ partial "structured-data/faq.html" . }}
+
+{{- /* Collection Schema - Section and taxonomy pages */ -}}
+{{ partial "structured-data/collection.html" . }}

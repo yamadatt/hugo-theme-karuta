@@ -1,0 +1,43 @@
+{{- if .IsHome -}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": {{ .Site.Title | jsonify }},
+  "description": {{ .Site.Params.description | jsonify }},
+  "url": {{ .Site.BaseURL | jsonify }},
+  "inLanguage": {{ .Site.Language.Lang | default "ja" | jsonify }},
+  {{- with .Site.Params.logo }}
+  "logo": {
+    "@type": "ImageObject",
+    "url": {{ . | absURL | jsonify }},
+    "contentUrl": {{ . | absURL | jsonify }}
+  },
+  {{- end }}
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "{{ .Site.BaseURL }}search/?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": {{ .Site.Title | jsonify }},
+    "url": {{ .Site.BaseURL | jsonify }}
+    {{- with .Site.Params.logo }},
+    "logo": {
+      "@type": "ImageObject",
+      "url": {{ . | absURL | jsonify }}
+    }
+    {{- end }}
+  }
+  {{- with .Site.Params.social }},
+  "sameAs": [
+    {{ range $index, $social := . }}{{ if gt $index 0 }},{{ end }}{{ $social | jsonify }}{{ end }}
+  ]
+  {{- end }}
+}
+</script>
+{{- end -}}

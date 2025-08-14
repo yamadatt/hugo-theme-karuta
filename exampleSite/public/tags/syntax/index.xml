@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Syntax - Karuta Theme Demo</title>
+    <link>http://localhost:1315/tags/syntax/</link>
+    <description>Syntax - A demo site for the Karuta Hugo theme</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 10 Jan 2024 14:30:00 +0000</lastBuildDate><atom:link href="http://localhost:1315/tags/syntax/index.xml" rel="self" type="application/rss+xml" /><item>
+      <title>Syntax Highlighting Demo</title>
+      <link>http://localhost:1315/posts/syntax-highlighting/</link>
+      <pubDate>Wed, 10 Jan 2024 14:30:00 +0000</pubDate>
+      <guid>http://localhost:1315/posts/syntax-highlighting/</guid>
+      <description>Syntax Highlighting The Karuta theme includes excellent syntax highlighting support using Hugo&amp;rsquo;s built-in Chroma highlighter.
+JavaScript Example function greet(name) { console.log(`Hello, ${name}!`); return `Welcome to Karuta theme, ${name}`; } const message = greet(&amp;#34;Hugo&amp;#34;); document.getElementById(&amp;#34;output&amp;#34;).textContent = message; Python Example def fibonacci(n): &amp;#34;&amp;#34;&amp;#34;Generate fibonacci sequence up to n terms.&amp;#34;&amp;#34;&amp;#34; a, b = 0, 1 for _ in range(n): yield a a, b = b, a + b # Generate first 10 fibonacci numbers fib_sequence = list(fibonacci(10)) print(f&amp;#34;Fibonacci sequence: {fib_sequence}&amp;#34;) HTML Example &amp;lt;!</description>
+      <category>code</category>
+      <category>syntax</category>
+      <category>highlighting</category>
+    </item>
+  </channel>
+</rss>

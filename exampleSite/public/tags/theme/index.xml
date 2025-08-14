@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Theme - Karuta Theme Demo</title>
+    <link>http://localhost:1315/tags/theme/</link>
+    <description>Theme - A demo site for the Karuta Hugo theme</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 15 Jan 2024 10:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1315/tags/theme/index.xml" rel="self" type="application/rss+xml" /><item>
+      <title>Welcome to Karuta Theme</title>
+      <link>http://localhost:1315/posts/welcome/</link>
+      <pubDate>Mon, 15 Jan 2024 10:00:00 +0000</pubDate>
+      <guid>http://localhost:1315/posts/welcome/</guid>
+      <description>Welcome to Karuta Welcome to the Karuta Hugo theme demo! This theme is designed with simplicity and readability in mind, featuring a clean card-style layout that works beautifully for blogs and personal websites.
+Key Features 🎴 Card-Style Layout The theme presents your content in elegant cards that are easy to scan and read.
+🔍 Client-Side Search Use the search functionality to quickly find posts without any server requests.
+🌓 Dark/Light Mode Toggle between dark and light themes to suit your preference.</description>
+      <category>welcome</category>
+      <category>hugo</category>
+      <category>theme</category>
+    </item>
+  </channel>
+</rss>

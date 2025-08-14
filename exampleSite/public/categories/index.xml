@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories - Karuta Theme Demo</title>
+    <link>http://localhost:1315/categories/</link>
+    <description>Categories - A demo site for the Karuta Hugo theme</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 15 Jan 2024 10:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1315/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+      <title>Announcements</title>
+      <link>http://localhost:1315/categories/announcements/</link>
+      <pubDate>Mon, 15 Jan 2024 10:00:00 +0000</pubDate>
+      <guid>http://localhost:1315/categories/announcements/</guid>
+      <description></description>
+    </item><item>
+      <title>Demo</title>
+      <link>http://localhost:1315/categories/demo/</link>
+      <pubDate>Wed, 10 Jan 2024 14:30:00 +0000</pubDate>
+      <guid>http://localhost:1315/categories/demo/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

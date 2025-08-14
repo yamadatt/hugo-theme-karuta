@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Demo - Karuta Theme Demo</title>
+    <link>http://localhost:1315/categories/demo/</link>
+    <description>Demo - A demo site for the Karuta Hugo theme</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 10 Jan 2024 14:30:00 +0000</lastBuildDate><atom:link href="http://localhost:1315/categories/demo/index.xml" rel="self" type="application/rss+xml" /><item>
+      <title>Syntax Highlighting Demo</title>
+      <link>http://localhost:1315/posts/syntax-highlighting/</link>
+      <pubDate>Wed, 10 Jan 2024 14:30:00 +0000</pubDate>
+      <guid>http://localhost:1315/posts/syntax-highlighting/</guid>
+      <description>Syntax Highlighting The Karuta theme includes excellent syntax highlighting support using Hugo&amp;rsquo;s built-in Chroma highlighter.
+JavaScript Example function greet(name) { console.log(`Hello, ${name}!`); return `Welcome to Karuta theme, ${name}`; } const message = greet(&amp;#34;Hugo&amp;#34;); document.getElementById(&amp;#34;output&amp;#34;).textContent = message; Python Example def fibonacci(n): &amp;#34;&amp;#34;&amp;#34;Generate fibonacci sequence up to n terms.&amp;#34;&amp;#34;&amp;#34; a, b = 0, 1 for _ in range(n): yield a a, b = b, a + b # Generate first 10 fibonacci numbers fib_sequence = list(fibonacci(10)) print(f&amp;#34;Fibonacci sequence: {fib_sequence}&amp;#34;) HTML Example &amp;lt;!</description>
+      <category>code</category>
+      <category>syntax</category>
+      <category>highlighting</category>
+    </item><item>
+      <title>Mermaid Diagrams Support</title>
+      <link>http://localhost:1315/posts/mermaid-diagrams/</link>
+      <pubDate>Mon, 08 Jan 2024 16:45:00 +0000</pubDate>
+      <guid>http://localhost:1315/posts/mermaid-diagrams/</guid>
+      <description>Mermaid Diagrams The Karuta theme includes built-in support for Mermaid diagrams, making it easy to create flowcharts, sequence diagrams, and more.
+Flowchart Example flowchart TD A[Start] --&amp;gt; B{Is Hugo theme?} B --&amp;gt;|Yes| C[Use Karuta theme] B --&amp;gt;|No| D[Find another theme] C --&amp;gt; E[Create beautiful blog] D --&amp;gt; F[Keep searching] E --&amp;gt; G[Enjoy blogging] F --&amp;gt; B G --&amp;gt; H[End] Sequence Diagram sequenceDiagram participant User participant Browser participant Server User-&amp;gt;&amp;gt;Browser: Enter URL Browser-&amp;gt;&amp;gt;Server: HTTP Request Server--&amp;gt;&amp;gt;Browser: HTML Response Browser--&amp;gt;&amp;gt;User: Render Page Note over User,Server: Hugo generates static sites Git Flow Diagram gitgraph commit branch develop checkout develop commit commit checkout main commit merge develop commit Class Diagram classDiagram class BlogPost { +String title +Date publishDate +String[] tags +String content +render() +getExcerpt() } class Theme { +String name +String version +renderPost(post) +applyStyles() } BlogPost --&amp;gt; Theme : uses Mermaid diagrams are rendered beautifully and adapt to the current theme (light/dark mode)!</description>
+      <category>mermaid</category>
+      <category>diagrams</category>
+      <category>flowchart</category>
+    </item><item>
+      <title>日本語コンテンツのサポート</title>
+      <link>http://localhost:1315/posts/japanese-content/</link>
+      <pubDate>Fri, 05 Jan 2024 09:15:00 +0000</pubDate>
+      <guid>http://localhost:1315/posts/japanese-content/</guid>
+      <description>日本語コンテンツのサポート Karutaテーマは日本語コンテンツに最適化されており、美しい日本語タイポグラフィを提供します。
+特徴 📖 読みやすさを重視 日本語の文字間隔、行間、フォントサイズが最適化されています。
+🎴 かるたからインスピレーション テーマ名の「かるた」は、日本の伝統的なカードゲームとドラマ「ちはやふる めぐり」からインスピレーションを得ています。
+コードブロックでの日本語 // 日本語コメント function あいさつ(名前) { console.log(`こんにちは、${名前}さん！`); return `Karutaテーマへようこそ、${名前}さん`; } const メッセージ = あいさつ(&amp;#34;太郎&amp;#34;); リスト表示 機能一覧 カードスタイルレイアウト クライアントサイド検索 ダーク/ライトモード切り替え レスポンシブデザイン 日本語最適化 シンタックスハイライト Mermaid図表対応 対応ブラウザ Chrome 90+ Firefox 88+ Safari 14+ Edge 90+ 引用文 美しい文章は、読む人の心を豊かにします。
+Karutaテーマは、その美しさを最大限に引き出すことを目指しています。
+表組み 項目 値 説明 テーマ名 Karuta かるたから命名 バージョン 1.0.0 初期リリース ライセンス MIT オープンソース 対応Hugo 0.115+ Extended版が必要 日本語と英語が混在する文章でも、バランスよく表示されます。This theme handles mixed Japanese and English content beautifully!</description>
+      <category>日本語</category>
+      <category>typography</category>
+      <category>フォント</category>
+    </item>
+  </channel>
+</rss>

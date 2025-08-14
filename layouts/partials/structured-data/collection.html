@@ -1,0 +1,79 @@
+{{- if eq .Kind "section" -}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": {{ .Title | jsonify }},
+  "description": {{ with .Params.description }}{{ . | jsonify }}{{ else }}{{ printf "%sに関する記事一覧" .Title | jsonify }}{{ end }},
+  "url": {{ .Permalink | jsonify }},
+  "inLanguage": {{ .Site.Language.Lang | default "ja" | jsonify }},
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": {{ .Site.Title | jsonify }},
+    "url": {{ .Site.BaseURL | jsonify }}
+  },
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": {{ len .Pages }},
+    "itemListElement": [
+      {{- range $index, $page := (first 10 .Pages) -}}
+      {{- if gt $index 0 }},{{ end }}
+      {
+        "@type": "ListItem",
+        "position": {{ add $index 1 }},
+        "item": {
+          "@type": "BlogPosting",
+          "headline": {{ $page.Title | jsonify }},
+          "url": {{ $page.Permalink | jsonify }},
+          "datePublished": {{ $page.Date.Format "2006-01-02T15:04:05Z07:00" | jsonify }},
+          "author": {
+            "@type": "Person",
+            "name": {{ or $page.Params.author $.Site.Params.author $.Site.Title | jsonify }}
+          }
+          {{- with $page.Summary }},
+          "description": {{ . | plainify | truncate 160 | jsonify }}
+          {{- end }}
+        }
+      }
+      {{- end -}}
+    ]
+  }
+}
+</script>
+{{- end -}}
+
+{{- if eq .Kind "taxonomy" -}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": {{ printf "%s: %s" (.Type | title) .Title | jsonify }},
+  "description": {{ printf "%sタグが付いた記事一覧" .Title | jsonify }},
+  "url": {{ .Permalink | jsonify }},
+  "inLanguage": {{ .Site.Language.Lang | default "ja" | jsonify }},
+  "about": {
+    "@type": "Thing",
+    "name": {{ .Title | jsonify }}
+  },
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": {{ len .Pages }},
+    "itemListElement": [
+      {{- range $index, $page := (first 10 .Pages) -}}
+      {{- if gt $index 0 }},{{ end }}
+      {
+        "@type": "ListItem",
+        "position": {{ add $index 1 }},
+        "item": {
+          "@type": "BlogPosting",
+          "headline": {{ $page.Title | jsonify }},
+          "url": {{ $page.Permalink | jsonify }},
+          "datePublished": {{ $page.Date.Format "2006-01-02T15:04:05Z07:00" | jsonify }}
+        }
+      }
+      {{- end -}}
+    ]
+  }
+}
+</script>
+{{- end -}}

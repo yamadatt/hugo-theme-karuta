@@ -1,0 +1,42 @@
+{{- if not .IsHome -}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": {{ .Site.Title | jsonify }},
+      "item": {{ .Site.BaseURL | jsonify }}
+    }
+    {{- $sections := slice -}}
+    {{- $currentSection := .Section -}}
+    {{- if $currentSection -}}
+      {{- $sections = $sections | append $currentSection -}}
+      {{- $position := 2 -}}
+      {{- range $index, $section := $sections -}}
+        {{- $sectionPage := site.GetPage (printf "/%s" $section) -}}
+        {{- if $sectionPage -}},
+    {
+      "@type": "ListItem",
+      "position": {{ $position }},
+      "name": {{ $sectionPage.Title | jsonify }},
+      "item": {{ $sectionPage.Permalink | jsonify }}
+    }
+        {{- $position = add $position 1 -}}
+        {{- end -}}
+      {{- end -}}
+      {{- if eq .Kind "page" -}},
+    {
+      "@type": "ListItem",
+      "position": {{ add $position 0 }},
+      "name": {{ .Title | jsonify }},
+      "item": {{ .Permalink | jsonify }}
+    }
+      {{- end -}}
+    {{- end -}}
+  ]
+}
+</script>
+{{- end -}}

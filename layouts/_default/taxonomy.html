@@ -1,0 +1,14 @@
+{{ define "main" }}
+  <section class="taxonomy-page">
+    <h1 class="single-title">{{ .Title }}</h1>
+    {{/* Paginate taxonomy pages (e.g., /tags/<tag>) by date desc */}}
+    {{ $sorted := sort .Pages "Date" "desc" }}
+    {{ $p := .Paginate $sorted }}
+    <div class="grid" id="cards">
+      {{ range $p.Pages }}
+        {{ partial "card.html" . }}
+      {{ end }}
+    </div>
+    {{ partial "pagination.html" . }}
+  </section>
+{{ end }}

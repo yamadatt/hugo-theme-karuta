@@ -1,0 +1,12 @@
+{{ define "main" }}
+  {{/* Home: paginate posts sorted by date desc */}}
+  {{ $all := where .Site.RegularPages "Section" "posts" }}
+  {{ $sorted := sort $all "Date" "desc" }}
+  {{ $p := .Paginate $sorted }}
+  <div class="grid" id="cards">
+    {{ range $p.Pages }}
+      {{ partial "card.html" . }}
+    {{ end }}
+  </div>
+  {{ partial "pagination.html" . }}
+{{ end }}

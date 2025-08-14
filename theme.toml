@@ -1,0 +1,13 @@
+name = "Karuta"
+license = "MIT"
+licenselink = "https://opensource.org/licenses/MIT"
+description = "A clean, Japanese-friendly card-style Hugo theme with client-side search, dark/light mode toggle, and responsive design."
+homepage = "https://github.com/yamadatt/hugo-theme-karuta"
+tags = ["blog", "card", "search", "responsive", "dark-mode", "japanese", "mermaid", "clean"]
+features = ["client-side search", "dark/light mode toggle", "responsive design", "card layout", "mermaid diagrams", "syntax highlighting", "image optimization", "Japanese typography"]
+min_version = "0.115.0"
+
+[author]
+  name = "yamadatt"
+  homepage = "https://github.com/yamadatt"
+

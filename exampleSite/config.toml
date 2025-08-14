@@ -1,0 +1,44 @@
+baseURL = "https://example.com/"
+languageCode = "en-us"
+title = "Karuta Theme Demo"
+theme = "karuta"
+
+[params]
+  description = "A demo site for the Karuta Hugo theme"
+  hideTitleIcon = false
+  defaultCover = "/img/default-cover.svg"
+  popularTagsCount = 8
+
+[markup.highlight]
+  noClasses = false
+  style = "xcode"
+
+[outputs]
+  home = ["HTML", "JSON"]
+  section = ["HTML", "JSON"]
+
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "Posts"
+    url = "/posts/"
+    weight = 2
+  [[menu.main]]
+    name = "Tags"
+    url = "/tags/"
+    weight = 3
+  [[menu.main]]
+    name = "Archives"
+    url = "/archives/"
+    weight = 4
+  [[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 5
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"

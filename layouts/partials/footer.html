@@ -1,0 +1,14 @@
+<div class="footer-inner">
+  <p>© {{ now.Year }} {{ .Site.Title }}</p>
+  <div class="footer-links">
+    {{ with .Site.GetPage "/" }}
+      {{ range .AlternativeOutputFormats }}
+        {{ if eq .Name "RSS" }}
+          <a href="{{ .Permalink }}" rel="{{ .Rel }}" type="{{ .MediaType.Type }}" title="RSS Feed"
+            >RSS</a
+          >
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  </div>
+</div>

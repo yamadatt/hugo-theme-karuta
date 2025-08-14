@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mermaid - Karuta Theme Demo</title>
+    <link>http://localhost:1315/tags/mermaid/</link>
+    <description>Mermaid - A demo site for the Karuta Hugo theme</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 08 Jan 2024 16:45:00 +0000</lastBuildDate><atom:link href="http://localhost:1315/tags/mermaid/index.xml" rel="self" type="application/rss+xml" /><item>
+      <title>Mermaid Diagrams Support</title>
+      <link>http://localhost:1315/posts/mermaid-diagrams/</link>
+      <pubDate>Mon, 08 Jan 2024 16:45:00 +0000</pubDate>
+      <guid>http://localhost:1315/posts/mermaid-diagrams/</guid>
+      <description>Mermaid Diagrams The Karuta theme includes built-in support for Mermaid diagrams, making it easy to create flowcharts, sequence diagrams, and more.
+Flowchart Example flowchart TD A[Start] --&amp;gt; B{Is Hugo theme?} B --&amp;gt;|Yes| C[Use Karuta theme] B --&amp;gt;|No| D[Find another theme] C --&amp;gt; E[Create beautiful blog] D --&amp;gt; F[Keep searching] E --&amp;gt; G[Enjoy blogging] F --&amp;gt; B G --&amp;gt; H[End] Sequence Diagram sequenceDiagram participant User participant Browser participant Server User-&amp;gt;&amp;gt;Browser: Enter URL Browser-&amp;gt;&amp;gt;Server: HTTP Request Server--&amp;gt;&amp;gt;Browser: HTML Response Browser--&amp;gt;&amp;gt;User: Render Page Note over User,Server: Hugo generates static sites Git Flow Diagram gitgraph commit branch develop checkout develop commit commit checkout main commit merge develop commit Class Diagram classDiagram class BlogPost { +String title +Date publishDate +String[] tags +String content +render() +getExcerpt() } class Theme { +String name +String version +renderPost(post) +applyStyles() } BlogPost --&amp;gt; Theme : uses Mermaid diagrams are rendered beautifully and adapt to the current theme (light/dark mode)!</description>
+      <category>mermaid</category>
+      <category>diagrams</category>
+      <category>flowchart</category>
+    </item>
+  </channel>
+</rss>

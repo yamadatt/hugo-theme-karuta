@@ -1,0 +1,29 @@
+{{- /* Build-time link handling: external links open in new tab with rel, internal open same tab */ -}}
+{{- $href := .Destination | safeURL -}}
+{{- $title := .Title -}}
+{{- $text := .Text | safeHTML -}}
+{{- $isAbs := or (hasPrefix $href "http://") (hasPrefix $href "https://") -}}
+{{- $isRel := or (hasPrefix $href "/") (hasPrefix $href "./") (hasPrefix $href "../") -}}
+{{- $isExternal := and $isAbs true -}}
+{{- if $isRel -}}
+  {{- $isExternal = false -}}
+{{- else if $isAbs -}}
+  {{- with .Page.Site.BaseURL -}}
+    {{- $base := . -}}
+    {{- if hasPrefix $href $base -}}
+      {{- $isExternal = false -}}
+    {{- end -}}
+  {{- end -}}
+{{- else -}}
+  {{- /* mailto:, tel:, anchors, etc. */ -}}
+  {{- $isExternal = false -}}
+{{- end -}}
+
+
+<a
+  href="{{ $href }}"
+  {{ with $title }}title="{{ . }}"{{ end }}{{ if $isExternal }}
+    target="_blank" rel="noopener noreferrer"
+  {{ end }}
+  >{{ $text }}</a
+>

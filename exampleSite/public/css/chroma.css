@@ -1,0 +1,196 @@
+/* Chroma syntax highlighting - light/dark tokens
+   Scope tokens under .chroma. Color palette tuned for readability. */
+
+/* ----- Base (both modes) ----- */
+.chroma {
+  color: var(--code-text);
+  background: var(--code-bg);
+}
+.chroma .ln {
+  color: var(--muted);
+}
+.chroma .err {
+  color: #b91c1c;
+}
+.chroma .w {
+  color: inherit;
+}
+
+/* ----- Light palette (default) ----- */
+/* Comments */
+.chroma .c,
+.chroma .ch,
+.chroma .cm,
+.chroma .c1,
+.chroma .cs {
+  color: #6e7781;
+}
+/* Keywords */
+.chroma .k,
+.chroma .kc,
+.chroma .kd,
+.chroma .kn,
+.chroma .kp,
+.chroma .kr,
+.chroma .kt {
+  color: #cf222e;
+  font-weight: 600;
+}
+/* Operators */
+.chroma .o,
+.chroma .ow {
+  color: #0550ae;
+}
+/* Numbers */
+.chroma .m,
+.chroma .mb,
+.chroma .mf,
+.chroma .mh,
+.chroma .mi,
+.chroma .il {
+  color: #0550ae;
+}
+/* Strings */
+.chroma .s,
+.chroma .sa,
+.chroma .sb,
+.chroma .sc,
+.chroma .sd,
+.chroma .s2,
+.chroma .se,
+.chroma .sh,
+.chroma .si,
+.chroma .sr,
+.chroma .s1,
+.chroma .ss {
+  color: #116329;
+}
+/* Names */
+.chroma .na {
+  color: #1f6feb;
+}
+.chroma .nb,
+.chroma .bp {
+  color: #953800;
+}
+.chroma .nc,
+.chroma .no,
+.chroma .nd,
+.chroma .ni,
+.chroma .ne,
+.chroma .nn {
+  color: #6f42c1;
+}
+.chroma .nf {
+  color: #6f42c1;
+}
+.chroma .nt {
+  color: #1f6feb;
+}
+.chroma .nv {
+  color: #953800;
+}
+/* Punctuation */
+.chroma .p {
+  color: var(--code-text);
+}
+
+/* ----- Dark palette ----- */
+.theme-dark .chroma {
+  color: var(--code-text);
+  background: var(--code-bg);
+}
+/* Comments */
+.theme-dark .chroma .c,
+.theme-dark .chroma .ch,
+.theme-dark .chroma .cm,
+.theme-dark .chroma .c1,
+.theme-dark .chroma .cs {
+  color: #8b949e;
+}
+/* Keywords */
+.theme-dark .chroma .k,
+.theme-dark .chroma .kc,
+.theme-dark .chroma .kd,
+.theme-dark .chroma .kn,
+.theme-dark .chroma .kp,
+.theme-dark .chroma .kr,
+.theme-dark .chroma .kt {
+  color: #ff7b72;
+  font-weight: 600;
+}
+/* Operators */
+.theme-dark .chroma .o,
+.theme-dark .chroma .ow {
+  color: #79c0ff;
+}
+/* Numbers */
+.theme-dark .chroma .m,
+.theme-dark .chroma .mb,
+.theme-dark .chroma .mf,
+.theme-dark .chroma .mh,
+.theme-dark .chroma .mi,
+.theme-dark .chroma .il {
+  color: #79c0ff;
+}
+/* Strings */
+.theme-dark .chroma .s,
+.theme-dark .chroma .sa,
+.theme-dark .chroma .sb,
+.theme-dark .chroma .sc,
+.theme-dark .chroma .sd,
+.theme-dark .chroma .s2,
+.theme-dark .chroma .se,
+.theme-dark .chroma .sh,
+.theme-dark .chroma .si,
+.theme-dark .chroma .sr,
+.theme-dark .chroma .s1,
+.theme-dark .chroma .ss {
+  color: #7ee787;
+}
+/* Names */
+.theme-dark .chroma .na {
+  color: #a5d6ff;
+}
+.theme-dark .chroma .nb,
+.theme-dark .chroma .bp {
+  color: #ffa657;
+}
+.theme-dark .chroma .nc,
+.theme-dark .chroma .no,
+.theme-dark .chroma .nd,
+.theme-dark .chroma .ni,
+.theme-dark .chroma .ne,
+.theme-dark .chroma .nn {
+  color: #d2a8ff;
+}
+.theme-dark .chroma .nf {
+  color: #d2a8ff;
+}
+.theme-dark .chroma .nt {
+  color: #a5d6ff;
+}
+.theme-dark .chroma .nv {
+  color: #ffa657;
+}
+/* Punctuation */
+.theme-dark .chroma .p {
+  color: var(--code-text);
+}
+
+/* Layout tweaks for Chroma blocks */
+.chroma {
+  border: 1px solid var(--code-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+.chroma code,
+.chroma pre {
+  background: transparent;
+}
+.chroma pre {
+  padding: 14px 16px;
+  margin: 14px 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}

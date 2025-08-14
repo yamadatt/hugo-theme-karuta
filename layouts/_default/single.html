@@ -1,0 +1,188 @@
+{{ define "main" }}
+  {{/* {{ partial "navigation.html" . }} */}}
+  <article class="single" role="article" aria-labelledby="article-title">
+    {{/* Cover image on single: respect cover.hidden */}}
+    {{ $cover := .Params.cover }}
+    {{ with $cover }}
+      {{ $img := or .image .src }}
+      {{ $hidden := cond (isset . "hidden") (index . "hidden") false }}
+      {{ if and $img (not $hidden) }}
+        {{ $alt := or (index . "alt") $.Title }}
+        {{ $res := $.Resources.GetMatch $img }}
+        <figure class="single-cover">
+          {{ if $res }}
+            {{ $isSVG := eq $res.MediaType.SubType "svg" }}
+            {{ if $isSVG }}
+              <img src="{{ $res.RelPermalink }}" alt="{{ $alt }}" loading="lazy" decoding="async" />
+            {{ else }}
+              {{ $w400 := $res.Resize "400x webp q85" }}
+              {{ $w800 := $res.Resize "800x webp q85" }}
+              {{ $w1200 := $res.Resize "1200x webp q85" }}
+              {{ $w1600 := $res.Resize "1600x webp q85" }}
+              {{ $w2000 := $res.Resize "2000x webp q85" }}
+              <!-- Fallback formats -->
+              {{ $w800jpg := $res.Resize "800x jpg q85" }}
+              {{ $w1200jpg := $res.Resize "1200x jpg q85" }}
+              <picture>
+                <source
+                  srcset="
+                    {{ $w400.RelPermalink }}  400w,
+                    {{ $w800.RelPermalink }}  800w,
+                    {{ $w1200.RelPermalink }} 1200w,
+                    {{ $w1600.RelPermalink }} 1600w,
+                    {{ $w2000.RelPermalink }} 2000w
+                  "
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                  type="image/webp"
+                />
+                <img
+                  src="{{ $w1200jpg.RelPermalink }}"
+                  srcset="{{ $w800jpg.RelPermalink }} 800w, {{ $w1200jpg.RelPermalink }} 1200w"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                  width="{{ $w1200.Width }}"
+                  height="{{ $w1200.Height }}"
+                  alt="{{ $alt }}"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+            {{ end }}
+          {{ else }}
+            {{/* Fallback to static/img when not a page resource */}}
+            {{ $src := $img }}
+            {{ if hasPrefix $img "img/" }}
+              {{ $src = printf "/%s" $img }}
+            {{ else if not (or (hasPrefix $img "/") (hasPrefix $img "http")) }}
+              {{ $src = printf "/img/%s" $img }}
+            {{ end }}
+            <img src="{{ $src | relURL }}" alt="{{ $alt }}" loading="lazy" decoding="async" />
+          {{ end }}
+          {{ with (index . "caption") }}<figcaption>{{ . }}</figcaption>{{ end }}
+        </figure>
+      {{ end }}
+    {{ end }}
+    <header class="article-header">
+      <h1 id="article-title" class="single-title">{{ .Title }}</h1>
+      <div class="single-meta" role="group" aria-label="記事のメタ情報">
+        {{ with .Date }}
+          <time datetime="{{ .Format "2006-01-02" }}" aria-label="公開日"
+            >🗓 {{ .Format "2006-01-02" }}</time
+          >
+        {{ end }}
+        {{ with .Params.tags }}
+          <div class="tags" role="group" aria-label="タグ">
+            <span class="sr-only">タグ: </span>
+            🏷
+            {{ range $index, $tag := . }}
+              {{ if gt $index 0 }},{{ end }}<a
+                href="{{ "/tags/" | relURL }}{{ $tag | urlize }}/"
+                aria-label="{{ $tag }}タグの記事一覧"
+                >{{ $tag }}</a
+              >
+            {{ end }}
+          </div>
+        {{ end }}
+      </div>
+    </header>
+    <div class="content" role="main" aria-label="記事本文">
+      {{ .Content }}
+    </div>
+    <nav class="post-navigation" role="navigation" aria-label="記事間ナビゲーション">
+      {{ with .PrevInSection }}
+        <a
+          class="nav-link prev"
+          href="{{ .Permalink }}"
+          rel="prev"
+          aria-label="前の記事: {{ .Title }}"
+        >
+          <span class="nav-label">前の記事</span>
+          <span class="nav-title">← {{ .Title }}</span>
+        </a>
+      {{ end }}
+      {{ with .NextInSection }}
+        <a
+          class="nav-link next"
+          href="{{ .Permalink }}"
+          rel="next"
+          aria-label="次の記事: {{ .Title }}"
+        >
+          <span class="nav-label">次の記事</span>
+          <span class="nav-title">{{ .Title }} →</span>
+        </a>
+      {{ end }}
+    </nav>
+
+    {{/* Related posts */}}
+    {{ $show := default true .Site.Params.showRelated }}
+    {{ if $show }}
+      {{ $limit := default 4 .Site.Params.relatedLimit }}
+      {{ $related := first $limit (.Site.RegularPages.Related .) }}
+      {{ if gt (len $related) 0 }}
+        <section class="related-posts" role="complementary" aria-labelledby="related-title">
+          <h2 id="related-title" class="related-title">関連する記事</h2>
+          <ul class="related-list" role="list">
+            {{ range $related }}
+              {{ $p := . }}
+              <li role="listitem">
+                <a class="related-item" href="{{ $p.RelPermalink }}">
+                  {{ with $p.Params.cover }}
+                    {{ $img := or .image .src }}
+                    {{ with $img }}
+                      {{ $res := $p.Resources.GetMatch . }}
+                      {{ if $res }}
+                        {{ $thumb := $res.Fill "120x68 center" }}
+                        <img
+                          class="r-cover"
+                          src="{{ $thumb.RelPermalink }}"
+                          width="120"
+                          height="68"
+                          alt="{{ $p.Title }}"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      {{ else }}
+                        {{ $src := . }}
+                        {{ if hasPrefix . "img/" }}
+                          {{ $src = printf "/%s" . }}
+                        {{ else if not (or (hasPrefix . "/") (hasPrefix . "http")) }}
+                          {{ $src = printf "/img/%s" . }}
+                        {{ end }}
+                        <img
+                          class="r-cover"
+                          src="{{ $src | relURL }}"
+                          alt="{{ $p.Title }}"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      {{ end }}
+                    {{ end }}
+                  {{ else }}
+                    {{/* Default cover when none set */}}
+                    {{ $default := or $.Site.Params.defaultCover "/img/default-cover.svg" }}
+                    <img
+                      class="r-cover"
+                      src="{{ $default | relURL }}"
+                      width="120"
+                      height="68"
+                      alt="{{ $p.Title }}"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  {{ end }}
+                  <div class="r-body">
+                    <h3 class="r-title">{{ $p.Title }}</h3>
+                    {{ with $p.Date }}
+                      <time datetime="{{ .Format "2006-01-02" }}"
+                        >🗓 {{ .Format "2006-01-02" }}</time
+                      >
+                    {{ end }}
+                  </div>
+                </a>
+              </li>
+            {{ end }}
+          </ul>
+        </section>
+      {{ end }}
+    {{ end }}
+  </article>
+{{ end }}

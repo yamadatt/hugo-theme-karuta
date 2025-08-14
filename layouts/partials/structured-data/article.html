@@ -1,0 +1,109 @@
+{{- if eq .Kind "page" -}}
+  {{- $description := "" -}}
+  {{- if .Params.description -}}
+    {{- $description = .Params.description -}}
+  {{- else if .Params.summary -}}
+    {{- $description = .Params.summary -}}
+  {{- else if .Summary -}}
+    {{- $description = .Summary | plainify | truncate 160 -}}
+  {{- else -}}
+    {{- $description = .Site.Params.description -}}
+  {{- end -}}
+
+  {{- $image := "" -}}
+  {{- $imageWidth := 1200 -}}
+  {{- $imageHeight := 630 -}}
+  {{- if .Params.cover -}}
+    {{- $img := or .Params.cover.image .Params.cover.src -}}
+    {{- if $img -}}
+      {{- $res := .Resources.GetMatch $img -}}
+      {{- if $res -}}
+        {{- $processedImg := $res.Resize "1200x630 center" -}}
+        {{- $image = $processedImg.Permalink -}}
+        {{- $imageWidth = $processedImg.Width -}}
+        {{- $imageHeight = $processedImg.Height -}}
+      {{- else -}}
+        {{- $src := $img -}}
+        {{- if hasPrefix $img "img/" -}}
+          {{- $src = printf "/%s" $img -}}
+        {{- else if not (or (hasPrefix $img "/") (hasPrefix $img "http")) -}}
+          {{- $src = printf "/img/%s" $img -}}
+        {{- end -}}
+        {{- $image = ($src | absURL) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if not $image -}}
+    {{- $default := or .Site.Params.defaultCover "/img/default-cover.svg" -}}
+    {{- $image = ($default | absURL) -}}
+  {{- end -}}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ .Title | jsonify }},
+  "description": {{ $description | jsonify }},
+  "url": {{ .Permalink | jsonify }},
+  "datePublished": {{ .Date.Format "2006-01-02T15:04:05Z07:00" | jsonify }},
+  {{ with .Lastmod }}"dateModified": {{ .Format "2006-01-02T15:04:05Z07:00" | jsonify }},{{ end }}
+  "author": {
+    "@type": "Person",
+    "name": {{ or .Params.author .Site.Params.author .Site.Title | jsonify }},
+    "url": {{ .Site.BaseURL | jsonify }}
+    {{- with .Site.Params.authorImage }},
+    "image": {
+      "@type": "ImageObject",
+      "url": {{ . | absURL | jsonify }}
+    }
+    {{- end }}
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": {{ .Site.Title | jsonify }},
+    "url": {{ .Site.BaseURL | jsonify }}
+    {{- with .Site.Params.logo }},
+    "logo": {
+      "@type": "ImageObject",
+      "url": {{ . | absURL | jsonify }}
+    }
+    {{- end }}
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": {{ .Permalink | jsonify }}
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": {{ $image | jsonify }},
+    "contentUrl": {{ $image | jsonify }},
+    "width": {{ $imageWidth }},
+    "height": {{ $imageHeight }}
+  },
+  {{ with .Params.tags }}"keywords": {{ . | jsonify }},{{ end }}
+  "wordCount": {{ .WordCount }},
+  "inLanguage": {{ .Site.Language.Lang | default "ja" | jsonify }},
+  "articleSection": {{ .Section | jsonify }},
+  "isPartOf": {
+    "@type": "Blog",
+    "name": {{ .Site.Title | jsonify }},
+    "url": {{ .Site.BaseURL | jsonify }}
+  }
+  {{- if .Params.tags }},
+  "about": [
+    {{- range $index, $tag := .Params.tags -}}
+    {{- if gt $index 0 }},{{ end }}
+    {
+      "@type": "Thing",
+      "name": {{ $tag | jsonify }},
+      "url": {{ printf "%stags/%s/" $.Site.BaseURL ($tag | urlize) | jsonify }}
+    }
+    {{- end -}}
+  ]
+  {{- end }}
+  {{- with .ReadingTime }},
+  "timeRequired": {{ printf "PT%dM" . | jsonify }}
+  {{- end }}
+}
+</script>
+{{- end -}}

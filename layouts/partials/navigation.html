@@ -1,0 +1,27 @@
+{{/* Navigation breadcrumb for SEO and UX
+  Shows current page location in site hierarchy
+*/}}
+{{- if not .IsHome -}}
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol class="breadcrumb-list">
+      <li class="breadcrumb-item">
+        <a href="{{ .Site.BaseURL | relURL }}" rel="home">{{ .Site.Title }}</a>
+      </li>
+      {{- if .Section -}}
+        {{- $sectionPage := .Site.GetPage .Section -}}
+        {{- if $sectionPage -}}
+          <li class="breadcrumb-item">
+            <a href="{{ $sectionPage.Permalink }}"
+              >{{ $sectionPage.Title | default (title .Section) }}</a
+            >
+          </li>
+        {{- end -}}
+        {{- if eq .Kind "page" -}}
+          <li class="breadcrumb-item active" aria-current="page">
+            <span>{{ .Title }}</span>
+          </li>
+        {{- end -}}
+      {{- end -}}
+    </ol>
+  </nav>
+{{- end -}}

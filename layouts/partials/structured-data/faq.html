@@ -1,0 +1,49 @@
+{{- if and (eq .Kind "page") .Params.faq -}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {{- range $index, $faq := .Params.faq -}}
+    {{- if gt $index 0 }},{{ end }}
+    {
+      "@type": "Question",
+      "name": {{ $faq.question | jsonify }},
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": {{ $faq.answer | jsonify }}
+      }
+    }
+    {{- end -}}
+  ]
+}
+</script>
+{{- end -}}
+
+{{- /* FAQ section detection from content */ -}}
+{{- if and (eq .Kind "page") (findRE "(?i)<h[2-6][^>]*>.*FAQ.*</h[2-6]>" .Content) -}}
+  {{- $faqContent := .Content -}}
+  {{- $questions := findRE "(?i)<h[2-6][^>]*>.*\\?.*</h[2-6]>" $faqContent -}}
+  {{- if gt (len $questions) 0 -}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {{- range $index, $question := $questions -}}
+    {{- $cleanQuestion := $question | replaceRE "<[^>]+>" "" | plainify -}}
+    {{- if gt $index 0 }},{{ end }}
+    {
+      "@type": "Question",
+      "name": {{ $cleanQuestion | jsonify }},
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": {{ printf "%sに関する回答です。詳細は記事をご覧ください。" $cleanQuestion | jsonify }}
+      }
+    }
+    {{- end -}}
+  ]
+}
+</script>
+  {{- end -}}
+{{- end -}}

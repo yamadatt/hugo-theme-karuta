@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="{{ .Site.Language.Lang | default "ja" }}">
+  <head>
+    {{ partial "head.html" . }}
+  </head>
+  <body class="theme-card-search">
+    {{/* Google Tag Manager (noscript) */}}
+    {{ with .Site.Params.googleTagManager }}
+      <noscript>
+        <iframe
+          src="https://www.googletagmanager.com/ns.html?id={{ . }}"
+          height="0"
+          width="0"
+          style="display:none;visibility:hidden"
+        ></iframe>
+      </noscript>
+    {{ end }}
+    <!-- Skip to main content for screen readers -->
+    <a href="#main-content" class="skip-to-main">メインコンテンツにスキップ</a>
+
+    <header class="site-header" role="banner">
+      {{ partial "header.html" . }}
+    </header>
+
+    <main id="main-content" class="container" role="main" aria-label="メインコンテンツ">
+      {{ block "main" . }}{{ end }}
+    </main>
+    <footer class="site-footer" role="contentinfo" aria-label="サイトフッター">
+      {{ partial "footer.html" . }}
+    </footer>
+    {{ partial "search_modal.html" . }}
+
+
+    <!-- Scroll to top button with reading progress -->
+    <button
+      id="scroll-to-top"
+      class="scroll-to-top"
+      aria-label="ページトップに戻る"
+      title="ページトップに戻る"
+    >
+      <div class="scroll-progress-ring">
+        <svg class="progress-ring" width="52" height="52" viewBox="0 0 52 52" aria-hidden="true">
+          <circle class="progress-ring-bg" cx="26" cy="26" r="22" stroke-width="3" />
+          <circle class="progress-ring-fill" cx="26" cy="26" r="22" stroke-width="3" />
+        </svg>
+        <div class="scroll-content">
+          <svg
+            class="scroll-icon"
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M12 2l8 8h-6v12h-4V10H4l8-8z" fill="currentColor" />
+          </svg>
+          <span class="progress-text">0</span>
+        </div>
+      </div>
+    </button>
+
+    <!-- Optimized JavaScript Bundles -->
+    <!-- Critical: Theme & Navigation (inline or high priority) -->
+    <script src="{{ "/js/dist/critical.min.js" | relURL }}" defer></script>
+
+    <!-- Main: Search & Interactions (deferred) -->
+    <script src="{{ "/js/dist/main.min.js" | relURL }}" defer></script>
+
+    <!-- Lazy: Lazy loading & Service Worker (low priority) -->
+    <script src="{{ "/js/dist/lazy.min.js" | relURL }}" defer></script>
+  </body>
+</html>

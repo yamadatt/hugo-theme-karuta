@@ -1,0 +1,43 @@
+{{- if .IsHome -}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": {{ .Site.Title | jsonify }},
+  "url": {{ .Site.BaseURL | jsonify }},
+  "description": {{ .Site.Params.description | jsonify }},
+  {{- with .Site.Params.logo }}
+  "logo": {
+    "@type": "ImageObject",
+    "url": {{ . | absURL | jsonify }},
+    "contentUrl": {{ . | absURL | jsonify }},
+    "width": {{ .Site.Params.logoWidth | default 200 }},
+    "height": {{ .Site.Params.logoHeight | default 60 }}
+  },
+  {{- end }}
+  {{- with .Site.Params.social }}
+  "sameAs": [
+    {{ range $index, $social := . }}{{ if gt $index 0 }},{{ end }}{{ $social | jsonify }}{{ end }}
+  ],
+  {{- end }}
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "availableLanguage": ["Japanese", "ja"]
+    {{- with .Site.Params.email }},
+    "email": {{ . | jsonify }}
+    {{- end }}
+  },
+  "founder": {
+    "@type": "Person",
+    "name": {{ or .Site.Params.author .Site.Title | jsonify }}
+  },
+  "foundingDate": {{ .Site.Params.foundingDate | default "2023-01-01" | jsonify }},
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "JP",
+    "addressRegion": {{ .Site.Params.region | default "Tokyo" | jsonify }}
+  }
+}
+</script>
+{{- end -}}

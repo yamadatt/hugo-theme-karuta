@@ -1,0 +1,35 @@
+{{- $p := .Paginator -}}
+{{- if gt $p.TotalPages 1 -}}
+  <nav class="pagination" role="navigation" aria-label="Pagination">
+    {{- with $p.Prev -}}
+      <a class="page prev" href="{{ .URL }}" rel="prev" aria-label="Previous page">« Prev</a>
+    {{- end -}}
+
+    {{/* Condensed page numbers with first/last and ellipses */}}
+    {{- $curr := $p.PageNumber -}}
+    {{- $total := $p.TotalPages -}}
+    {{- $.Scratch.Set "prevShown" 0 -}}
+    {{- range $pager := $p.Pagers -}}
+      {{- $n := $pager.PageNumber -}}
+      {{- $show := or (or (eq $n 1) (eq $n $total)) (and (ge $n (sub $curr 1)) (le $n (add $curr 1))) -}}
+      {{- if $show -}}
+        {{- $prev := $.Scratch.Get "prevShown" -}}
+        {{- if and (gt $prev 0) (gt (sub $n $prev) 1) -}}
+          <span class="page gap" aria-hidden="true">…</span>
+        {{- end -}}
+        {{- $isCurrent := eq $pager $p -}}
+        <a
+          class="page{{ if $isCurrent }}current{{ end }}"
+          href="{{ $pager.URL }}"
+          aria-current="{{ if $isCurrent }}page{{ end }}"
+          >{{ $n }}</a
+        >
+        {{- $.Scratch.Set "prevShown" $n -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- with $p.Next -}}
+      <a class="page next" href="{{ .URL }}" rel="next" aria-label="Next page">Next »</a>
+    {{- end -}}
+  </nav>
+{{- end -}}

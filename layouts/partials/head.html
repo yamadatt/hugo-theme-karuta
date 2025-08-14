@@ -1,0 +1,250 @@
+{{- $title := .Title -}}
+{{- $description := "" -}}
+{{- if .Params.description -}}
+  {{- $description = .Params.description -}}
+{{- else if .Params.summary -}}
+  {{- $description = .Params.summary -}}
+{{- else if .Summary -}}
+  {{- $description = .Summary -}}
+{{- else -}}
+  {{- $description = .Site.Params.description -}}
+{{- end -}}
+{{- $image := "" -}}
+{{- if .Params.cover -}}
+  {{- $img := or .Params.cover.image .Params.cover.src -}}
+  {{- if $img -}}
+    {{- $res := .Resources.GetMatch $img -}}
+    {{- if $res -}}
+      {{- /* Resource found: get absolute URL */ -}}
+      {{- $image = $res.Permalink -}}
+      {{- if not (hasPrefix $image "http") -}}
+        {{- $image = ($image | absURL) -}}
+      {{- end -}}
+    {{- else -}}
+      {{- $src := $img -}}
+      {{- if hasPrefix $img "img/" -}}
+        {{- $src = printf "/%s" $img -}}
+      {{- else if not (or (hasPrefix $img "/") (hasPrefix $img "http")) -}}
+        {{- $src = printf "/img/%s" $img -}}
+      {{- end -}}
+      {{- $image = ($src | absURL) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if not $image -}}
+  {{- /* Use site-specific OGP image for homepage, otherwise default cover */ -}}
+  {{- if and .IsHome .Site.Params.ogpImage -}}
+    {{- $image = (.Site.Params.ogpImage | absURL) -}}
+  {{- else -}}
+    {{- $default := or .Site.Params.defaultCover "/img/default-cover.svg" -}}
+    {{- $image = ($default | absURL) -}}
+  {{- end -}}
+{{- end -}}
+{{- /* Final safety check: ensure absolute URL */ -}}
+{{- if and $image (not (hasPrefix $image "http")) -}}
+  {{- $image = ($image | absURL) -}}
+{{- end -}}
+{{- $url := .Permalink -}}
+{{- $siteName := .Site.Title -}}
+{{- $type := cond (eq .Kind "page") "article" "website" -}}
+
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{{ if $title }}{{ $title }} ·{{ end }}{{ .Site.Title }}</title>
+<meta name="description" content="{{ $description }}" />
+<link rel="canonical" href="{{ $url }}" />
+
+<!-- Favicons -->
+{{ with .Site.Params.favicon }}
+  <link rel="icon" type="image/x-icon" href="{{ . | relURL }}" />
+{{ end }}
+{{ with .Site.Params.faviconPng }}
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ . | relURL }}" />
+{{ end }}
+{{ with .Site.Params.appleTouchIcon }}
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ . | relURL }}" />
+{{ end }}
+
+
+<!-- Open Graph -->
+<!-- OGP DEBUG: $image = {{ $image }} -->
+<!-- OGP DEBUG: $title = {{ $title }} -->
+<!-- OGP DEBUG: $description = {{ $description }} -->
+<meta property="og:type" content="{{ $type }}" />
+<meta property="og:title" content="{{ if $title }}{{ $title }}{{ else }}{{ $siteName }}{{ end }}" />
+<meta property="og:description" content="{{ $description }}" />
+<meta property="og:url" content="{{ $url }}" />
+<meta property="og:site_name" content="{{ $siteName }}" />
+<meta property="og:locale" content="{{ .Site.Language.Lang | default "ja_JP" }}" />
+<meta property="og:image" content="{{ $image }}" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+{{/* Set og:image:type based on filename extension */}}
+{{ $imgType := "image/jpeg" }}
+{{ if strings.HasSuffix (lower $image) ".svg" }}
+  {{ $imgType = "image/svg+xml" }}
+{{ else if strings.HasSuffix (lower $image) ".png" }}
+  {{ $imgType = "image/png" }}
+{{ else if strings.HasSuffix (lower $image) ".webp" }}
+  {{ $imgType = "image/webp" }}
+{{ else if strings.HasSuffix (lower $image) ".gif" }}
+  {{ $imgType = "image/gif" }}
+{{ end }}
+<meta property="og:image:type" content="{{ $imgType }}" />
+<meta
+  property="og:image:alt"
+  content="{{ if $title }}
+    {{ $title }}
+  {{ else }}
+    {{ $siteName }}
+  {{ end }}"
+/>
+{{ if eq $type "article" }}
+  <meta
+    property="article:published_time"
+    content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}"
+  />
+  {{ with .Lastmod }}
+    <meta property="article:modified_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}" />
+  {{ end }}
+  {{ with .Params.tags }}
+    {{ range . }}
+      <meta property="article:tag" content="{{ . }}" />
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+
+<!-- Twitter Cards -->
+<!-- TWITTER DEBUG: card image = {{ $image }} -->
+<meta name="twitter:card" content="summary_large_image" />
+{{ with .Site.Params.social.twitter }}
+  <meta name="twitter:site" content="@{{ . }}" />
+  <meta name="twitter:creator" content="@{{ . }}" />
+{{ end }}
+<meta
+  name="twitter:title"
+  content="{{ if $title }}
+    {{ $title }}
+  {{ else }}
+    {{ $siteName }}
+  {{ end }}"
+/>
+<meta name="twitter:description" content="{{ $description }}" />
+<meta name="twitter:image" content="{{ $image }}" />
+<meta
+  name="twitter:image:alt"
+  content="{{ if $title }}
+    {{ $title }}
+  {{ else }}
+    {{ $siteName }}
+  {{ end }}"
+/>
+<meta name="twitter:image:width" content="1200" />
+<meta name="twitter:image:height" content="630" />
+
+<!-- Feed Links -->
+{{ range .AlternativeOutputFormats -}}
+  {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+{{ end -}}
+
+
+<!-- Critical CSS inlined for fastest First Paint -->
+<style>{{ readFile "themes/karuta/static/css/critical.css" | safeCSS }}</style>
+
+<!-- Preload and load main CSS asynchronously -->
+<link
+  rel="preload"
+  href="{{ "/css/main.css" | relURL }}"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript><link rel="stylesheet" href="{{ "/css/main.css" | relURL }}" /></noscript>
+
+<!-- Load accessibility CSS asynchronously -->
+<link
+  rel="preload"
+  href="{{ "/css/accessibility.css" | relURL }}"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript><link rel="stylesheet" href="{{ "/css/accessibility.css" | relURL }}" /></noscript>
+
+<!-- Load syntax highlighting CSS asynchronously -->
+<link
+  rel="preload"
+  href="{{ "/css/chroma.css" | relURL }}"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript><link rel="stylesheet" href="{{ "/css/chroma.css" | relURL }}" /></noscript>
+
+<!-- Preload critical JavaScript bundles -->
+<link rel="preload" href="{{ "/js/dist/critical.min.js" | relURL }}" as="script" />
+<link rel="preload" href="{{ "/js/dist/main.min.js" | relURL }}" as="script" />
+
+<!-- LCP Optimization: Preload hero images -->
+{{ if .IsHome }}
+  <!-- Preload first few post images for faster LCP -->
+  {{ range first 3 (where .Site.RegularPages "Type" "posts") }}
+    {{ $cover := .Params.cover }}
+    {{ with $cover }}
+      {{ $img := or .image .src }}
+      {{ with $img }}
+        {{ $res := $.Resources.GetMatch . }}
+        {{ if $res }}
+          {{ $img640webp := $res.Fill "640x360 center webp q85" }}
+          <link rel="preload" as="image" href="{{ $img640webp.RelPermalink }}" type="image/webp" />
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ else if .IsPage }}
+  <!-- Preload single page hero image -->
+  {{ $cover := .Params.cover }}
+  {{ with $cover }}
+    {{ $img := or .image .src }}
+    {{ $hidden := cond (isset . "hidden") (index . "hidden") false }}
+    {{ if and $img (not $hidden) }}
+      {{ $res := $.Resources.GetMatch $img }}
+      {{ if $res }}
+        {{ $w1200 := $res.Resize "1200x webp q85" }}
+        <link rel="preload" as="image" href="{{ $w1200.RelPermalink }}" type="image/webp" />
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem("theme");
+      var prefersDark =
+        window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      var useDark = saved ? saved === "dark" : prefersDark;
+      if (useDark) {
+        document.documentElement.classList.add("theme-dark");
+      }
+    } catch (e) {}
+  })();
+</script>
+  <script>
+    window.__DEFAULT_COVER = "{{ with .Site.Params.defaultCover }}{{ . | relURL }}{{ else }}{{ "/img/default-cover.svg" | relURL }}{{ end }}";
+  </script> {{ partial "structured-data.html" . }}
+{{ partial "breadcrumb.html" . }}
+
+{{/* Google Analytics (UA or GA4). Enabled when googleAnalytics is set in config.toml */}}
+{{ if .Site.GoogleAnalytics }}
+  {{ template "_internal/google_analytics.html" . }}
+{{ end }}
+
+{{/* Google Tag Manager (optional): set params.googleTagManager = "GTM-XXXX" */}}
+{{ with .Site.Params.googleTagManager }}
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','{{ . }}');
+    </script>
+{{ end }}

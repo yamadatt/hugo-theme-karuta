@@ -1,0 +1,106 @@
+{{ define "main" }}
+  <section class="terms-page">
+    <h1 class="single-title">{{ .Title | default "Tags" }}</h1>
+
+    {{/* Determine min and max usage counts for scaling */}}
+    {{ $byCount := .Data.Terms.ByCount }}
+    {{ $max := 0 }}
+    {{ $min := 0 }}
+    {{ if gt (len $byCount) 0 }}
+      {{ $max = (index (first 1 $byCount) 0).Count }}
+      {{ $min = (index (last 1 $byCount) 0).Count }}
+    {{ end }}
+    {{/* Step for 5 buckets (ceil division): step = max(1, ceil((max-min)/5)) */}}
+    {{ $range := sub $max $min }}
+    {{ $stepRaw := div (add $range 4) 5 }}
+    {{ $step := cond (lt $stepRaw 1) 1 $stepRaw }}
+
+
+    <div class="tags-header">
+      <input
+        id="tag-filter"
+        class="tag-filter"
+        type="search"
+        placeholder="タグを絞り込み…"
+        aria-label="タグを絞り込み"
+      />
+      <div class="tags-meta"><span id="tags-count">{{ len $byCount }}</span> tags</div>
+    </div>
+
+    {{/* Popular tags (top N by count) */}}
+    {{ $limit := default 8 .Site.Params.popularTagsCount }}
+    {{ $popular := first $limit $byCount }}
+    {{ if gt (len $popular) 0 }}
+      <h2 class="tags-subtitle">人気のタグ</h2>
+      <ul class="terms tag-cloud popular" aria-label="Popular tags" id="tags-popular">
+        {{ range $popular }}
+          {{ $idx := add 1 (div (sub .Count $min) $step) }}
+          {{ if gt $idx 5 }}{{ $idx = 5 }}{{ end }}
+          <li data-name="{{ lower .Page.Title }}">
+            <a
+              class="tag-chip tag-l{{ $idx }}"
+              href="{{ .Page.RelPermalink }}"
+              title="{{ .Count }} posts"
+            >
+              <span class="term-name">{{ .Page.Title }}</span>
+              <span class="term-count">{{ .Count }}</span>
+            </a>
+          </li>
+        {{ end }}
+      </ul>
+    {{ end }}
+
+    {{/* All tags (alphabetical), excluding popular */}}
+    {{ $popMap := dict }}
+    {{ range $popular }}{{ $popMap = merge $popMap (dict .Page.Title true) }}{{ end }}
+    <h2 class="tags-subtitle">すべてのタグ</h2>
+    <ul class="terms tag-cloud" aria-label="Tags" id="tags-list">
+      {{ $terms := .Data.Terms.Alphabetical }}
+      {{ range $terms }}
+        {{ if not (index $popMap .Page.Title) }}
+          {{ $idx := add 1 (div (sub .Count $min) $step) }}
+          {{ if gt $idx 5 }}{{ $idx = 5 }}{{ end }}
+          <li data-name="{{ lower .Page.Title }}">
+            <a
+              class="tag-chip tag-l{{ $idx }}"
+              href="{{ .Page.RelPermalink }}"
+              title="{{ .Count }} posts"
+            >
+              <span class="term-name">{{ .Page.Title }}</span>
+              <span class="term-count">{{ .Count }}</span>
+            </a>
+          </li>
+        {{ end }}
+      {{ end }}
+    </ul>
+  </section>
+
+  <script>
+    (function () {
+      var input = document.getElementById("tag-filter");
+      var list = document.getElementById("tags-list");
+      var list2 = document.getElementById("tags-popular");
+      var count = document.getElementById("tags-count");
+      if (!input || !list) return;
+      function norm(s) {
+        return (s || "").toString().toLowerCase();
+      }
+      input.addEventListener("input", function () {
+        var q = norm(input.value);
+        var shown = 0;
+        function applyFilter(root) {
+          if (!root) return;
+          root.querySelectorAll("li").forEach(function (li) {
+            var name = li.getAttribute("data-name") || "";
+            var ok = !q || name.indexOf(q) !== -1;
+            li.style.display = ok ? "" : "none";
+            if (ok) shown++;
+          });
+        }
+        applyFilter(list2);
+        applyFilter(list);
+        if (count) count.textContent = shown;
+      });
+    })();
+  </script>
+{{ end }}

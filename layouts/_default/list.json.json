@@ -1,0 +1,44 @@
+[
+  {{- $pages := .Pages -}}
+  {{- $last := sub (len $pages) 1 -}}
+  {{- range $i, $p := $pages -}}
+  {
+    "title": {{ $p.Title | jsonify }},
+    "summary": {{ $p.Summary | plainify | jsonify }},
+    "content": {{ $p.Content | plainify | jsonify }},
+    "description": {{ with $p.Params.description }}{{ . | jsonify }}{{ else }}null{{ end }},
+    "tags": {{ with $p.Params.tags }}{{ . | jsonify }}{{ else }}[]{{ end }},
+    "categories": {{ with $p.Params.categories }}{{ . | jsonify }}{{ else }}[]{{ end }},
+    "date": {{ with $p.Date }}{{ .Format "2006-01-02" | jsonify }}{{ else }}null{{ end }},
+    {{- /* Resolve cover image safely: supports string or object {image|src} */ -}}
+    {{- $img := "" -}}
+    {{- with $p.Params.cover -}}
+      {{- $t := printf "%T" . -}}
+      {{- if eq $t "string" -}}
+        {{- $img = . -}}
+      {{- else -}}
+        {{- if .image -}}
+          {{- $img = .image -}}
+        {{- else if .src -}}
+          {{- $img = .src -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $res := cond (ne $img "") ($p.Resources.GetMatch $img) nil -}}
+    {{- if $res -}}
+      {{- $isSVG := eq $res.MediaType.SubType "svg" -}}
+      {{- if $isSVG -}}
+        "cover": {{ $res.RelPermalink | jsonify }},
+      {{- else -}}
+        {{- $thumb := $res.Fill "160x160 center" -}}
+        "cover": {{ $thumb.RelPermalink | jsonify }},
+      {{- end -}}
+    {{- else if $img -}}
+        "cover": {{ $img | relURL | jsonify }},
+    {{- else -}}
+        "cover": null,
+    {{- end -}}
+    "permalink": {{ $p.Permalink | jsonify }}
+  }{{ if lt $i $last }},{{ end }}
+  {{- end -}}
+]

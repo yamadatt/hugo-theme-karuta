@@ -1,0 +1,108 @@
+<article class="card" role="article">
+  <a
+    class="card-link"
+    href="{{ .RelPermalink }}"
+    aria-labelledby="card-title-{{ .RelPermalink | md5 }}"
+  >
+    {{/* Cover image: support page bundles via .Resources.GetMatch */}}
+    {{ $cover := .Params.cover }}
+    {{ with $cover }}
+      {{ $img := or .image .src }}
+      {{ with $img }}
+        {{ $res := $.Resources.GetMatch . }}
+        {{ $alt := or $cover.alt $.Title }}
+        {{ if $res }}
+          {{ $isSVG := eq $res.MediaType.SubType "svg" }}
+          {{ if $isSVG }}
+            <div class="card-cover">
+              <img src="{{ $res.RelPermalink }}" alt="{{ $alt }}" loading="lazy" decoding="async" />
+            </div>
+          {{ else }}
+            {{ $img320webp := $res.Fill "320x180 center webp q85" }}
+            {{ $img480webp := $res.Fill "480x270 center webp q85" }}
+            {{ $img640webp := $res.Fill "640x360 center webp q85" }}
+            {{ $img800webp := $res.Fill "800x450 center webp q85" }}
+            <!-- Fallback JPEG -->
+            {{ $img320jpg := $res.Fill "320x180 center jpg q85" }}
+            {{ $img640jpg := $res.Fill "640x360 center jpg q85" }}
+            <div class="card-cover">
+              <picture>
+                <source
+                  srcset="
+                    {{ $img320webp.RelPermalink }} 320w,
+                    {{ $img480webp.RelPermalink }} 480w,
+                    {{ $img640webp.RelPermalink }} 640w,
+                    {{ $img800webp.RelPermalink }} 800w
+                  "
+                  sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, (max-width: 1200px) 33vw, 260px"
+                  type="image/webp"
+                />
+                <img
+                  src="{{ $img640jpg.RelPermalink }}"
+                  srcset="{{ $img320jpg.RelPermalink }} 320w, {{ $img640jpg.RelPermalink }} 640w"
+                  sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, (max-width: 1200px) 33vw, 260px"
+                  width="{{ $img640jpg.Width }}"
+                  height="{{ $img640jpg.Height }}"
+                  alt="{{ $alt }}"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+            </div>
+          {{ end }}
+        {{ else }}
+          {{/* Fallback to static/img when not a page resource */}}
+          {{ $src := . }}
+          {{ if hasPrefix . "img/" }}
+            {{ $src = printf "/%s" . }}
+          {{ else if not (or (hasPrefix . "/") (hasPrefix . "http")) }}
+            {{ $src = printf "/img/%s" . }}
+          {{ end }}
+          <div class="card-cover">
+            <img src="{{ $src | relURL }}" alt="{{ $alt }}" loading="lazy" decoding="async" />
+          </div>
+        {{ end }}
+      {{ end }}
+    {{ else }}
+      {{/* No cover set: use default image from params or theme asset */}}
+      {{ $default := or .Site.Params.defaultCover "/img/default-cover.svg" }}
+      <div class="card-cover">
+        <img src="{{ $default | relURL }}" alt="{{ .Title }}" loading="lazy" decoding="async" />
+      </div>
+    {{ end }}
+    <div class="card-body">
+      {{/* Title truncation: configurable via params.titleLength (default 32) */}}
+      {{ $tlen := default 32 .Site.Params.titleLength }}
+      {{ $tt := .Title | truncate $tlen }}
+      <h2 class="card-title">
+        <a href="{{ .RelPermalink }}">{{ $tt }}</a>
+      </h2>
+      <div class="card-meta" role="group" aria-label="記事のメタ情報">
+        {{ with .Date }}
+          <time datetime="{{ .Format "2006-01-02" }}" aria-label="公開日"
+            >🗓 {{ .Format "2006-01-02" }}</time
+          >
+        {{ end }}
+        {{ with .Params.tags }}
+          <div class="tags" role="group" aria-label="タグ">
+            <span class="sr-only">タグ: </span>
+            🏷
+            {{ range $index, $tag := . }}
+              {{ if gt $index 0 }},{{ end }}<a
+                href="{{ "/tags/" | relURL }}{{ $tag | urlize }}/"
+                aria-label="{{ $tag }}タグの記事一覧"
+                >{{ $tag }}</a
+              >
+            {{ end }}
+          </div>
+        {{ end }}
+      </div>
+      {{/* Summary truncation: configurable via params.summaryLength (default 100) */}}
+      {{ $slen := default 100 .Site.Params.summaryLength }}
+      {{/* Strip HTML (including any <img> from leading figures) and truncate */}}
+      {{ $clean := .Summary | plainify }}
+      {{ $st := $clean | truncate $slen }}
+      <p class="card-summary">{{ $st }}</p>
+    </div>
+  </a>
+</article>
