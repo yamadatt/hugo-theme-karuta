@@ -51,7 +51,7 @@
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>{{ if $title }}{{ $title }} ·{{ end }}{{ .Site.Title }}</title>
+<title>{{ if and $title (not .IsHome) }}{{ $title }} ·{{ end }}{{ .Site.Title }}</title>
 <meta name="description" content="{{ $description }}" />
 <link rel="canonical" href="{{ $url }}" />
 
