@@ -68,9 +68,6 @@
 
 
 <!-- Open Graph -->
-<!-- OGP DEBUG: $image = {{ $image }} -->
-<!-- OGP DEBUG: $title = {{ $title }} -->
-<!-- OGP DEBUG: $description = {{ $description }} -->
 <meta property="og:type" content="{{ $type }}" />
 <meta property="og:title" content="{{ if $title }}{{ $title }}{{ else }}{{ $siteName }}{{ end }}" />
 <meta property="og:description" content="{{ $description }}" />
@@ -117,7 +114,6 @@
 
 
 <!-- Twitter Cards -->
-<!-- TWITTER DEBUG: card image = {{ $image }} -->
 <meta name="twitter:card" content="summary_large_image" />
 {{ with .Site.Params.social.twitter }}
   <meta name="twitter:site" content="@{{ . }}" />
@@ -215,8 +211,8 @@
   </script> {{ partial "structured-data.html" . }}
 {{ partial "breadcrumb.html" . }}
 
-{{/* Google Analytics (UA or GA4). Enabled when googleAnalytics is set in config.toml */}}
-{{ if .Site.GoogleAnalytics }}
+{{/* Google Analytics (GA4). Enabled when services.googleAnalytics.ID is set in config.toml */}}
+{{ with site.Config.Services.GoogleAnalytics.ID }}
   {{ template "_internal/google_analytics.html" . }}
 {{ end }}
 
