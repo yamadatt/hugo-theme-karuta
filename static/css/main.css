@@ -522,6 +522,7 @@ h6,
 }
 .related-list li {
   padding: 0;
+  display: flex; /* Ensure items fill height */
 }
 .related-item {
   display: grid;
@@ -537,6 +538,7 @@ h6,
   transition:
     transform 0.12s ease,
     box-shadow 0.12s ease;
+  width: 100%; /* Fill li */
 }
 .related-item:hover {
   transform: translateY(-2px);
@@ -552,12 +554,16 @@ h6,
 }
 .related-item .r-body {
   min-width: 0;
+  height: 100%; /* Fill available height */
+  display: flex;
+  flex-direction: column;
 }
 .related-item .r-title {
   margin: 0 0 4px;
   font-size: 15px;
   line-height: 1.4;
   color: var(--heading);
+  flex-grow: 1; /* Push time to bottom */
 }
 .related-item time {
   color: var(--muted);
