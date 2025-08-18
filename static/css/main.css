@@ -1814,3 +1814,104 @@ html {
     padding: 8px 10px;
   }
 }
+
+/* Table of Contents */
+.toc {
+  background: var(--code-bg, #f1f5f9);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.toc[open] {
+  padding-bottom: 1.5rem;
+}
+
+.toc-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--heading, #0f172a);
+  cursor: pointer;
+  list-style: none; /* Remove default marker */
+  padding: 0.5rem;
+  margin: -0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.toc-title::-webkit-details-marker {
+  display: none;
+}
+
+.toc-title:hover {
+  background: var(--accent-weak, rgba(59, 130, 246, 0.1));
+}
+
+.toc-icon {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+  color: var(--muted, #64748b);
+}
+
+.toc[open] > .toc-title .toc-icon {
+  transform: rotate(180deg);
+}
+
+.toc nav#TableOfContents {
+  margin-top: 1rem;
+  padding-left: 0;
+  overflow: hidden;
+}
+
+.toc nav#TableOfContents ul {
+  padding-left: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.toc nav#TableOfContents ul li {
+  margin: 0.1rem 0;
+}
+
+.toc nav#TableOfContents ul li a {
+  color: var(--muted, #64748b);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: block;
+  padding: 0.5rem 1rem;
+  border-left: 3px solid transparent;
+  font-size: 0.95em;
+}
+
+.toc nav#TableOfContents ul li a:hover {
+  color: var(--accent, #3b82f6);
+  background-color: var(--accent-weak, rgba(59, 130, 246, 0.1));
+  border-left-color: var(--accent-weak, rgba(59, 130, 246, 0.1));
+}
+
+.toc nav#TableOfContents ul li a.active {
+  color: var(--accent, #3b82f6);
+  font-weight: 600;
+  background-color: var(--accent-weak, rgba(59, 130, 246, 0.2));
+  border-left-color: var(--accent, #3b82f6);
+}
+
+.toc nav#TableOfContents ul ul {
+  padding-left: 1rem;
+}
+
+/* Desktop: Keep TOC open by default */
+@media (min-width: 769px) {
+  .toc-title {
+    pointer-events: none; /* Disable click */
+  }
+  .toc-icon {
+    display: none; /* Hide icon on desktop */
+  }
+}

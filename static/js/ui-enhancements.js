@@ -174,9 +174,6 @@
     });
   }
 
-  // Page loading animation was previously defined but unused.
-  // Removed to satisfy strict ESLint (no-unused-vars) without changing behavior.
-
   // Clear unwanted focus on page load
   function initFocusManagement() {
     // Remove focus from elements on page load to prevent blue outline
@@ -190,5 +187,72 @@
     initFocusManagement();
     initScrollToTop();
     initSmoothScroll();
+    initTOC();
   });
+
+  // Table of Contents functionality
+  function initTOC() {
+    const tocContainer = document.getElementById("toc-container");
+    if (!tocContainer) return;
+
+    // Handle desktop view: always open
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        tocContainer.open = true;
+      }
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+
+    // Scroll-based active link highlighting
+    const tocLinks = Array.from(tocContainer.querySelectorAll('#TableOfContents a[href^="#"]'));
+    const headings = tocLinks.map(link => {
+      const id = link.getAttribute('href').substring(1);
+      return document.getElementById(id);
+    }).filter(Boolean);
+
+    if (headings.length === 0) return;
+
+    let activeHeadingId = null;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Find the topmost visible heading based on intersection
+        let topmostVisibleEntry = null;
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            if (!topmostVisibleEntry || entry.target.getBoundingClientRect().top < topmostVisibleEntry.target.getBoundingClientRect().top) {
+              topmostVisibleEntry = entry;
+            }
+          }
+        }
+
+        if (topmostVisibleEntry) {
+          activeHeadingId = topmostVisibleEntry.target.id;
+        } else {
+          // If no heading is intersecting, find the last one scrolled past
+          let lastScrolledPast = null;
+          for (const heading of headings) {
+            if (heading.getBoundingClientRect().top < 0) {
+              lastScrolledPast = heading;
+            } else {
+              break;
+            }
+          }
+          if (lastScrolledPast) {
+            activeHeadingId = lastScrolledPast.id;
+          }
+        }
+
+        tocLinks.forEach((link) => {
+          const linkHref = link.getAttribute("href").substring(1);
+          link.classList.toggle("active", linkHref === activeHeadingId);
+        });
+      },
+      { rootMargin: "-10% 0px -80% 0px", threshold: 0 }
+    );
+
+    headings.forEach((heading) => observer.observe(heading));
+  }
 })();
