@@ -1,7 +1,9 @@
 // Service Worker for caching strategy - Optimized for bundled JS
-const CACHE_NAME = 'karuta-v2-optimized';
-const STATIC_CACHE = 'karuta-static-v2';
-const DYNAMIC_CACHE = 'karuta-dynamic-v2';
+// Version: 3.0.0 - Network First for HTML documents
+const CACHE_VERSION = 'v3.0.0';
+const CACHE_NAME = `karuta-${CACHE_VERSION}`;
+const STATIC_CACHE = `karuta-static-${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `karuta-dynamic-${CACHE_VERSION}`;
 
 // Files to cache immediately (updated for optimized bundles)
 const STATIC_FILES = [
@@ -55,7 +57,7 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - Network First for HTML, Cache First for assets
 self.addEventListener('fetch', event => {
   // Skip cross-origin requests
   if (!event.request.url.startsWith(self.location.origin)) {
@@ -67,27 +69,78 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  const url = event.request.url;
+  const isHTMLDocument = event.request.destination === 'document' || 
+                         event.request.headers.get('accept')?.includes('text/html') ||
+                         url.endsWith('/') ||
+                         url.includes('/posts/') ||
+                         url.includes('/tags/') ||
+                         url.includes('/categories/');
+  
+  // Network First strategy for HTML documents
+  if (isHTMLDocument) {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          // Check if valid response
+          if (!response || response.status !== 200 || response.type !== 'basic') {
+            return response;
+          }
+          
+          // Cache the fresh response
+          const responseToCache = response.clone();
+          caches.open(DYNAMIC_CACHE).then(cache => {
+            cache.put(event.request, responseToCache);
+            console.log('Updated HTML cache:', url);
+          });
+          
+          return response;
+        })
+        .catch(() => {
+          // Fallback to cache if network fails
+          console.log('Network failed, serving HTML from cache:', url);
+          return caches.match(event.request).then(response => {
+            return response || caches.match('/');
+          });
+        })
+    );
+    return;
+  }
+
+  // Cache First strategy for static assets
   event.respondWith(
     caches.match(event.request).then(response => {
       if (response) {
-        console.log('Serving from cache:', event.request.url);
+        console.log('Serving asset from cache:', url);
+        
+        // Background update for important assets
+        if (url.includes('/css/') || url.includes('/js/')) {
+          fetch(event.request).then(freshResponse => {
+            if (freshResponse && freshResponse.status === 200) {
+              const cacheName = url.includes('/js/dist/') ? STATIC_CACHE : DYNAMIC_CACHE;
+              caches.open(cacheName).then(cache => {
+                cache.put(event.request, freshResponse.clone());
+                console.log('Background update for:', url);
+              });
+            }
+          }).catch(() => {
+            // Silent fail for background update
+          });
+        }
+        
         return response;
       }
 
-      // Clone the request because it's a stream
+      // Not in cache, fetch from network
       const fetchRequest = event.request.clone();
-
       return fetch(fetchRequest).then(response => {
         // Check if valid response
         if (!response || response.status !== 200 || response.type !== 'basic') {
           return response;
         }
 
-        // Clone the response because it's a stream
+        // Clone the response and cache it
         const responseToCache = response.clone();
-        const url = event.request.url;
-
-        // Enhanced cache strategy based on content type and priority
         let cacheName = DYNAMIC_CACHE;
         
         // Cache static assets with longer TTL
@@ -115,7 +168,7 @@ self.addEventListener('fetch', event => {
 
         return response;
       }).catch(() => {
-        // Fallback for offline pages
+        // Return offline fallback for documents
         if (event.request.destination === 'document') {
           return caches.match('/');
         }
