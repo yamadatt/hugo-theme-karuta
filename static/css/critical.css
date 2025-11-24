@@ -1,13 +1,41 @@
 /* Critical CSS - Above the fold styles only */
+/* M3 Expressive Design System */
 :root {
-  --bg: #f8fafc;
-  --text: #1f2937;
-  --heading: #334155;
-  --muted: #666;
+  /* M3 Expressive Colors */
+  --bg: #fefbff;
+  --surface: #fefbff;
+  --text: #1c1b1f;
+  --heading: #1c1b1f;
+  --muted: #49454f;
   --card: #fff;
-  --border: #e5e7eb;
-  --accent: #4f7ac9;
-  --accent-weak: rgba(79, 122, 201, 0.18);
+  --border: #e7e0ec;
+
+  /* Primary (Purple) */
+  --primary: #6750a4;
+  --primary-container: #eaddff;
+  --on-primary: #fff;
+  --on-primary-container: #21005d;
+
+  /* Secondary */
+  --secondary: #625b71;
+  --secondary-container: #e8def8;
+
+  /* Accent (kept for compatibility) */
+  --accent: #6750a4;
+  --accent-weak: rgba(103, 80, 164, 0.12);
+
+  /* Error */
+  --error: #b3261e;
+  --error-container: #f9dedc;
+
+  /* M3 Elevation & Shape */
+  --elevation-1: 0 1px 3px 1px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.3);
+  --elevation-2: 0 2px 6px 2px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.3);
+  --elevation-3: 0 4px 8px 3px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.3);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 28px;
 }
 
 * {
@@ -21,18 +49,39 @@ body {
   background: var(--bg);
   color: var(--text);
   font:
-    16px/1.6 system-ui,
+    16px/1.5 "Roboto",
+    system-ui,
     -apple-system,
     "Segoe UI",
-    Roboto,
-    Helvetica,
-    Arial,
+    "Noto Sans JP",
     sans-serif;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-h1,
-h2,
+/* M3 Typography Scale */
+h1 {
+  font-size: 2.25rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--heading);
+}
+
+h2 {
+  font-size: 1.75rem;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--heading);
+}
+
 h3 {
+  font-size: 1.375rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
   color: var(--heading);
 }
 
@@ -42,20 +91,21 @@ h3 {
   padding: 24px;
 }
 
-/* Header - Critical for first paint */
+/* Header - Critical for first paint - M3 Expressive */
 .site-header {
   position: sticky;
   top: 0;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
+  background: var(--surface, var(--bg));
+  border-bottom: none;
   z-index: 50;
+  box-shadow: var(--elevation-1, 0 1px 3px 1px rgba(0,0,0,0.15));
 }
 
 .header-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 12px 24px;
 }
@@ -63,9 +113,11 @@ h3 {
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-weight: 700;
-  font-size: 18px;
+  gap: 12px;
+  font-weight: 500;
+  font-size: 1.25rem;
+  letter-spacing: 0;
+  color: var(--heading);
 }
 
 /* Grid layout - Critical for content display */
@@ -75,36 +127,61 @@ h3 {
   gap: 20px;
 }
 
-/* Card basics - Critical for first content */
+/* Card basics - M3 Expressive */
 .card {
   background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  border: none;
+  border-radius: var(--radius-lg);
   overflow: hidden;
+  box-shadow: var(--elevation-1);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--elevation-2);
+  transform: translateY(-2px);
 }
 
 .card-body {
-  padding: 12px 14px 14px;
+  padding: 16px 20px 20px;
 }
 
 .card-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0 0 6px;
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin: 0 0 8px;
   color: var(--heading);
-  line-height: 1.35;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
 }
 
-/* Dark theme critical styles */
+/* Dark theme critical styles - M3 Expressive */
 .theme-dark {
-  --bg: #0f172a;
-  --text: #e2e8f0;
-  --heading: #f1f5f9;
-  --muted: #94a3b8;
-  --card: #1e293b;
-  --border: #334155;
-  --accent: #60a5fa;
-  --accent-weak: rgba(96, 165, 250, 0.15);
+  --bg: #1c1b1f;
+  --surface: #1c1b1f;
+  --text: #e6e1e5;
+  --heading: #e6e1e5;
+  --muted: #cac4d0;
+  --card: #2b2930;
+  --border: #49454f;
+
+  /* Primary Dark */
+  --primary: #d0bcff;
+  --primary-container: #4f378b;
+  --on-primary: #381e72;
+  --on-primary-container: #eaddff;
+
+  /* Secondary Dark */
+  --secondary: #ccc2dc;
+  --secondary-container: #4a4458;
+
+  /* Accent (compatibility) */
+  --accent: #d0bcff;
+  --accent-weak: rgba(208, 188, 255, 0.16);
+
+  /* Error Dark */
+  --error: #f2b8b5;
+  --error-container: #8c1d18;
 }
 
 /* Mobile responsive - Critical for mobile first paint */

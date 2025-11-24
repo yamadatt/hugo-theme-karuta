@@ -2,6 +2,7 @@
 /public/
 /resources/_gen/
 .hugo_build.lock
+exampleSite/public/
 
 # macOS specific
 .DS_Store
